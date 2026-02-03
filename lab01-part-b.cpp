@@ -1,136 +1,39 @@
-#include "Student.hpp"
+#include <iostream>
+#include "Student.h"
+#include <string>
 
-/*******************************************************************************
- * Function prototypes
-*******************************************************************************/
-
-void getInput(Student[], const int);
-int modify(int);
-void display(const Student[], const int);
-
-/*******************************************************************************
- * Description:
- * Starting point of the program. Creates an array of `Student` objects.
- * 
- * Input:
- * N/A
- *
- * Output:
- * An integer to signal to the OS the exit code.
-*******************************************************************************/
+static int NUMSTUDENTS = 5;
 
 int main() {
-    // variables
-    const int SIZE = 5;
-    Student objArray[SIZE];
 
-    // get input from the user
-    getInput(objArray, SIZE);
+Student* students[NUMSTUDENTS];
 
-    // modify the ages for certain students
-    // uses a range-based for loop with a reference variable
-    for (Student& s : objArray) {
-        s.setAge(modify(s.getAge()));
-    }
-
-    // display the modified information back to the user
-    display(objArray, SIZE);
-
-    // terminate
-    return 0;
+for (int i = 0; i < NUMSTUDENTS; ++i) {
+    students[i] = new Student();
 }
 
-/*******************************************************************************
- * Description:
- * Uses a `for` loop to prompt the user for the name/age of each student. Store
- * the information in the appropriate object.
- * 
- * Input:
- * objArray - an array of `Student` objects
- * SIZE     - a constant integer that represents the size of the array
- *
- * Output:
- * N/A
-*******************************************************************************/
+std::string tempString;
+int tempInt;
 
-void getInput(Student objArray[], const int SIZE) {
-    // temporary variables
-    int    t = 0;
-    string s = "";
-
-    // for each student
-    for (int i = 0; i < SIZE; i++) {
-        // prompt and store the name of the current student
-        cout << "Enter the name for student #" << i + 1 << ": ";
-        getline(cin, s);
-
-        // prompt and store for the age of the current student
-        cout << "Enter the age for student #" << i + 1 << ": ";
-        cin >> t;
-
-        // need to ignore the newline for the next iteration
-        cin.ignore();
-
-        // store the data from the user into the current object in the array
-        objArray[i].setName(s);
-        objArray[i].setAge(t);
-    }
+// this should probably be a separate function outside of main
+for (int i = 0; i < NUMSTUDENTS; ++i) {
+    std::cout << "Enter the name for student #" << i+1 << ":";
+    std::cin >> tempString;
+    students[i]->setName(tempString);
+    std::cout << "Enter the age for student #" << i+1 << ":";
+    std::cin >> tempInt;
+    students[i]->setAge(tempInt);
 }
 
-/*******************************************************************************
- * Description:
- * Modifies the age for students below 18 or above 50. Students younger than 18
- * should have their age bumped up to 18. Students older than 50 should have
- * their age bumped down to 50. Students that do not meet the criteria do not
- * have their age modified.
- * 
- * Input:
- * i - the actual age of the student
- *
- * Output:
- * The modified age of the student.
-*******************************************************************************/
-
-int modify(int i) {
-    // younger students should bump their age up to 18
-    if (i < 18) {
-        i = 18;
-    }
-
-    // older students should bump their age down to 50
-    else if (i > 50) {
-        i = 50;
-    }
-
-    // return the modified age
-    return i;
+for (int i = 0; i < NUMSTUDENTS; ++i) {
+    std::cout << "Student #" << i+1 << std::endl;
+    std::cout << "    Name: " << students[i]->getName() << std::endl;
+    std::cout << "    Age: "  << students[i]->getAge()  << std::endl << std::endl;
 }
 
-/*******************************************************************************
- * Description:
- * Uses a `while` loop to display the information about the students stored in
- * the object array.
- * 
- * Input:
- * objArray - an array of `Student` objects
- * SIZE     - a constant integer that represents the size of the array
- *
- * Output:
- * N/A
-*******************************************************************************/
+for (int i = 0; i < NUMSTUDENTS; i++)
+{
+    delete students[i];
+}
 
-void display(const Student objArray[], const int SIZE) {
-    // counter variable
-    int i = 0;
-
-    // iterate through each student
-    while (i < SIZE) {
-        // display the student's information
-        cout << "Student #" << i + 1 << endl;
-        cout << "\tName: " << objArray[i].getName() << endl;
-        cout << "\tAge: " << objArray[i].getAge() << endl << endl;
-
-        // update the counter
-        i++;
-    }
 }
